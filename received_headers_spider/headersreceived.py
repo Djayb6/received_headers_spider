@@ -1,6 +1,5 @@
 import logging
 
-from twisted.web.iweb import UNKNOWN_LENGTH
 from scrapy.http import HtmlResponse
 from scrapy.responsetypes import responsetypes
 from scrapy import signals
@@ -27,8 +26,7 @@ class HeadersReceivedExtension(object):
         warnsize = getattr(spider, 'download_warnsize', self._default_maxsize)
         warnsize = request.meta.get('download_warnsize', warnsize)
 
-        response_length = request.meta.get('txresponse.length')
-        expected_size = response_length if response_length != UNKNOWN_LENGTH else -1
+        expected_size = response.meta.get('expected_size')
 
         # cancel if expected_size is above maxsize
         if maxsize and expected_size > maxsize:
